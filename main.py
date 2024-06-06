@@ -1,4 +1,3 @@
-import json
 from serpapi import GoogleSearch
 from openai import OpenAI
 import unicodedata
@@ -64,19 +63,15 @@ def get_daily_plan_for_destination(arrival_date_and_time: str, departure_date_an
     Day 1:
     <activity>
     <activity>
-    __________
     Day 2:
     <activity>
     <activity>
-    __________
     Day 3:
     <activity>
     <activity>
-    __________
     Day N:
     <activity>
     <activity>
-    __________
     4 Best Moments:
     <moment>
     <moment>
@@ -257,7 +252,6 @@ def get_top_5_options(start_date, end_date, trip_type, budget):
     print(data)
     return {k: data[k] for i, k in enumerate(data) if i < 5}
 
-
 def get_daily_plan_and_images(arrival_date: str, departure_date: str, trip_type: str, destination: str):
     # get the daily plan
     daily_plan = get_daily_plan_for_destination(arrival_date, departure_date, trip_type, destination)  
@@ -280,7 +274,6 @@ def get_daily_plan_and_images(arrival_date: str, departure_date: str, trip_type:
 
     return {"daily_plan": daily_plan_dict, "images": images}
 
-
 # FastAPI setup
 app = FastAPI()
 # CORS middleware
@@ -292,7 +285,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],  # Allows all headers
 )
-
 
 # FastAPI routes
 @app.get("/top-5-options")
