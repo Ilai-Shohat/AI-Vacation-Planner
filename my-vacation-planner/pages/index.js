@@ -163,75 +163,90 @@ export default function Home() {
             </div>
           </div>)}
 
-          {loadingDestinations &&
-            <div className="loading-spinner">
-              <div className="spinner-border text-primary" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            </div>}
-          {showDestinations && (
-            <div className="container mt-5 button-group">
-              {Object.entries(destinations).map(([key, destination], index) => (
-                <button className="btn btn-primary" key={index} onClick={() => handleClick(key)}>
-                  <span className="headline">{destination.destination}</span> <br />
-                  {destination.arrival_connections_list.length > 0 && (
-                    <>
-                      <span className="underline">First way flights connections:</span><br /> {destination.arrival_connections_list.join(', ')} <br />
-                      <br />
-                    </>
+        {loadingDestinations &&
+          <div className="loading-spinner">
+            <div className="spinner-border text-primary" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>}
+
+        {showDestinations && (
+          <div className="container-fluid mt-5 button-group">
+            {Object.entries(destinations).map(([key, destination], index) => (
+              <button className="btn btn-primary" key={index} onClick={() => handleClick(key)}>
+                <span className="headline">{destination.destination}</span> <br />
+                <span className="underline">Arrival time to destination:</span><br /> {destination.arrival_daytime}
+                <br /><br />
+
+                {destination.arrival_connections_list.length > 0 && (
+                  <>
+                    <span className="underline">First way flights connections:</span><br />
+                    {destination.arrival_connections_list.map((connection, i) => (
+                      <div key={i}>{connection}</div>
+                    ))}
+                    <br />
+                  </>
+                )}
+                <span className="underline">Hotel:</span>
+                <br />
+                {destination.hotel_name} <br />
+                <br />
+                <span className="underline">Total hotel price:</span><br /> {destination.hotel_total_price} $ <br />
+                <br />
+                <span className="underline">Departure time:</span><br /> {destination.departure_daytime} <br />
+                <br />
+                {destination.departure_connections_list.length > 0 && (
+                  <>
+                    <span className="underline">Second way flights connections:</span><br />
+                    {destination.departure_connections_list.map((connection, i) => (
+                      <div key={i}>{connection}</div>
+                    ))}
+                    <br />
+                  </>
+                )}
+                <span className="underline">Total flights costs:</span><br /> {destination.flights_total_price} $ <br />
+                <br />
+
+                <span className="underline2">Total trip cost:</span><br /> <text className="totalPrice">{destination.flights_total_price + destination.hotel_total_price} $</text>
+              </button>
+            ))}
+          </div >
+        )
+        }
+
+        {
+          loadingDailyPlanAndImages &&
+          <div className="loading-spinner">
+            <div className="spinner-border text-primary" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
+        }
+
+        {showDailyPlan && (
+          <div className="daily-plan-and-images-container">
+            <div className='daily-plan'>
+              <h2 style={{ textAlign: 'center' }}>Daily Plan</h2>
+              {Object.entries(dailyPlanAndImagesLinks.daily_plan).map(([key, value], index) => (
+                <div key={index}>
+                  <span>Day {key}:</span>
+                  {value.map((item, itemIndex) => (
+                    <li key={itemIndex}>{item}</li>
+                  ))}
+                  {index < Object.entries(dailyPlanAndImagesLinks.daily_plan).length - 1 && (
+                    <hr />
                   )}
-                  <span className="underline">Arrival time to destination:</span><br /> {destination.arrival_daytime} <br />
-                  <br />
-                  {destination.departure_connections_list.length > 0 && (
-                    <>
-                      <span className="underline">Second way flights connections:</span><br /> {destination.departure_connections_list.join(', ')} <br />
-                      <br />
-                    </>
-                  )}
-                  <span className="underline">Departure time:</span><br /> {destination.departure_daytime} <br />
-                  <br />
-                  <span className="underline">Total flights costs:</span><br /> {destination.flights_total_price} $ <br />
-                  <br />
-                  <span className="underline">Hotel:</span><br /> {destination.hotel_name} <br />
-                  <br />
-                  <span className="underline">Total hotel price:</span><br /> {destination.hotel_total_price} $ <br />
-                  <br />
-                  <span className="underline2">Total trip cost:</span><br /> <text className="totalPrice">{destination.flights_total_price + destination.hotel_total_price} $</text>
-                </button>
+                </div>
               ))}
             </div>
-          )}
-          {loadingDailyPlanAndImages &&
-            <div className="loading-spinner">
-              <div className="spinner-border text-primary" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            </div>}
-          {showDailyPlan && (
-            <div className="daily-plan-and-images-container">
-              <div className='daily-plan'>
-                <h2 style={{ textAlign: 'center' }}>Daily Plan</h2>
-                {Object.entries(dailyPlanAndImagesLinks.daily_plan).map(([key, value], index) => (
-                  <div key={index}>
-                    <span>Day {key}:</span>
-                    {value.map((item, itemIndex) => (
-                      <li key={itemIndex}>{item}</li>
-                    ))}
-                    {index < Object.entries(dailyPlanAndImagesLinks.daily_plan).length - 1 && (
-                      <hr />
-                    )}
-                  </div>
-                ))}
-              </div>
-              <div className='images'>
-                {dailyPlanAndImagesLinks.images.map((image, index) => (
-                  <img key={index} src={image} alt={`Image ${index}`} />
-                ))}
-              </div>
+            <div className='images'>
+              {dailyPlanAndImagesLinks.images.map((image, index) => (
+                <img key={index} src={image} alt={`Image ${index}`} />
+              ))}
             </div>
-          )}
-        </div>
-
+          </div>
+        )
+        }
       </div >
     </>
   );
