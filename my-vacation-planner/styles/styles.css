@@ -6,10 +6,7 @@ h1 {
     font-size: 48px;
     text-align: center;
     margin-top: 2rem;
-}
-
-br {
-    margin-bottom: 2rem;
+    /* Add margin space on top */
 }
 
 .form-label {
