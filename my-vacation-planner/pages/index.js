@@ -3,7 +3,9 @@ import axios from 'axios';
 import 'react-dates/initialize';
 import { DateRangePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Head from 'next/head';
+import DatePicker from 'react-datepicker';
 
 export default function Home() {
   const [startDate, setStartDate] = useState(null);
@@ -26,8 +28,14 @@ export default function Home() {
       return;
     }
 
+
     if (!tripType) {
       alert('Please select a trip type');
+      return;
+    }
+
+    if (!budget) {
+      alert('Please enter a budget');
       return;
     }
 
@@ -99,110 +107,125 @@ export default function Home() {
     <>
       <Head>
         <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet" />
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
       </Head>
       <div>
         <h1>AI Trip Planner</h1>
-        <div className="form-container">
-          <form onSubmit={handleSubmit}>
-            <label className="form-label">
-              Trip type:
-              <select className="form-input" value={tripType} onChange={handleInputChange(setTripType)} required>
-                <option value="" disabled>Select trip type</option>
-                <option value="ski">Ski</option>
-                <option value="beach">Beach</option>
-                <option value="city">City</option>
-                <option value="adventure">Adventure</option>
-                <option value="cruise">Cruise</option>
-                <option value="camping">Camping</option>
-                <option value="luxury">Luxury</option>
-                <option value="culinary">Culinary</option>
-              </select>
-            </label>
-            <label className="form-label">
-              Budget:
-              <input className="form-input" style={{ width: "5em" }} type="number" value={budget} onChange={handleInputChange(setBudget)} required min="1" />
-            </label>
-            <label className="form-label">
-              Date range:
-              <DateRangePicker
-                startDate={startDate}
-                startDateId="your_unique_start_date_id"
-                endDate={endDate}
-                endDateId="your_unique_end_date_id"
-                onDatesChange={handleDatesChange}
-                focusedInput={focusedInput}
-                onFocusChange={(focusedInput) => setFocusedInput(focusedInput)}
-                displayFormat="YYYY-MM-DD"
-                startDatePlaceholderText="yyyy-mm-dd"
-                endDatePlaceholderText="yyyy-mm-dd"
-              />
-            </label>
+        <div className="container mt-5 m">
+          <div className="card">
+            <div className="card-body">
+              <h2 className="card-title">Plan Your Trip</h2>
+              <form onSubmit={handleSubmit}>
+                <div className="form-row">
+                  <div className="form-group col-md-4">
+                    <label className="form-label">Date range:</label>
+                    <DateRangePicker
+                      startDate={startDate}
+                      startDateId="your_unique_start_date_id"
+                      endDate={endDate}
+                      endDateId="your_unique_end_date_id"
+                      onDatesChange={handleDatesChange}
+                      focusedInput={focusedInput}
+                      onFocusChange={(focusedInput) => setFocusedInput(focusedInput)}
+                      displayFormat="YYYY-MM-DD"
+                      startDatePlaceholderText="yyyy-mm-dd"
+                      endDatePlaceholderText="yyyy-mm-dd"
+                    />
+                  </div>
+                  <div className="form-group col-md-4">
+                    <label className="form-label">Trip type:</label>
+                    <select className="form-control" value={tripType} onChange={handleInputChange(setTripType)} required>
+                      <option value="" disabled>Select trip type</option>
+                      <option value="ski">Ski</option>
+                      <option value="beach">Beach</option>
+                      <option value="city">City</option>
+                    </select>
+                  </div>
+                  <div className="form-group col-md-4">
+                    <label className="form-label">Budget ($):</label>
+                    <input className="form-control" type="number" value={budget} onChange={handleInputChange(setBudget)} required min="1" />
+                  </div>
+                </div>
+                {showButton && (
+                  <div className="button-container">
+                    <button className="btn btn-primary btn-block" type="submit">Get Destinations</button>
+                  </div>
+                )}
+              </form>
+            </div>
+          </div>
 
-            {showButton && (
-              <div className="button-container">
-                <button className="submit-button" type="submit">Get Destinations</button>
+
+          {loadingDestinations &&
+            <div className="loading-spinner">
+              <div className="spinner-border text-primary" role="status">
+                <span className="sr-only">Loading...</span>
               </div>
-            )}
-          </form>
+            </div>}
+          {showDestinations && (
+            <div className="container mt-5 button-group">
+              {Object.entries(destinations).map(([key, destination], index) => (
+                <button className="btn btn-primary" key={index} onClick={() => handleClick(key)}>
+                  <span className="headline">{destination.destination}</span> <br />
+                  {destination.arrival_connections_list.length > 0 && (
+                    <>
+                      <span className="underline">First way flights connections:</span><br /> {destination.arrival_connections_list.join(', ')} <br />
+                      <br />
+                    </>
+                  )}
+                  <span className="underline">Arrival time to destination:</span><br /> {destination.arrival_daytime} <br />
+                  <br />
+                  {destination.departure_connections_list.length > 0 && (
+                    <>
+                      <span className="underline">Second way flights connections:</span><br /> {destination.departure_connections_list.join(', ')} <br />
+                      <br />
+                    </>
+                  )}
+                  <span className="underline">Departure time:</span><br /> {destination.departure_daytime} <br />
+                  <br />
+                  <span className="underline">Total flights costs:</span><br /> {destination.flights_total_price} $ <br />
+                  <br />
+                  <span className="underline">Hotel:</span><br /> {destination.hotel_name} <br />
+                  <br />
+                  <span className="underline">Total hotel price:</span><br /> {destination.hotel_total_price} $ <br />
+                  <br />
+                  <span className="underline2">Total trip cost:</span><br /> <text className="totalPrice">{destination.flights_total_price + destination.hotel_total_price} $</text>
+                </button>
+              ))}
+            </div>
+          )}
+          {loadingDailyPlanAndImages &&
+            <div className="loading-spinner">
+              <div className="spinner-border text-primary" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+            </div>}
+          {showDailyPlan && (
+            <div className="daily-plan-and-images-container">
+              <div className='daily-plan'>
+                <h2 style={{ textAlign: 'center' }}>Daily Plan</h2>
+                {Object.entries(dailyPlanAndImagesLinks.daily_plan).map(([key, value], index) => (
+                  <div key={index}>
+                    <span>Day {key}:</span>
+                    {value.map((item, itemIndex) => (
+                      <li key={itemIndex}>{item}</li>
+                    ))}
+                    {index < Object.entries(dailyPlanAndImagesLinks.daily_plan).length - 1 && (
+                      <hr />
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className='images'>
+                {dailyPlanAndImagesLinks.images.map((image, index) => (
+                  <img key={index} src={image} alt={`Image ${index}`} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        {loadingDestinations && <p className="loading-text">Loading...</p>}
-        {showDestinations && (
-          <div className="button-group">
-            {Object.entries(destinations).map(([key, destination], index) => (
-              <button key={index} onClick={() => handleClick(key)}>
-                <span className="headline">{destination.destination}, {destination.city}, {destination.country}</span> <br />
-                {destination.arrival_connections_list.length > 0 && (
-                  <>
-                    <span className="underline">First way flights connections:</span> {destination.arrival_connections_list.join(', ')} <br />
-                    <br />
-                  </>
-                )}
-                <span className="underline">Arrival time to destination:</span> {destination.arrival_daytime} <br />
-                <br />
-                {destination.departure_connections_list.length > 0 && (
-                  <>
-                    <span className="underline">Second way flights connections:</span> {destination.departure_connections_list.join(', ')} <br />
-                    <br />
-                  </>
-                )}
-                <span className="underline">Departure time:</span> {destination.departure_daytime} <br />
-                <br />
-                <span className="underline">Total flights costs:</span> {destination.flights_total_price} $ <br />
-                <br />
-                <span className="underline">Hotel:</span> {destination.hotel_name} <br />
-                <br />
-                <span className="underline">Total hotel price:</span> {destination.hotel_total_price} $ <br />
-                <br />
-                <span className="underline2">Total trip cost:</span> <text className="totalPrice">{destination.flights_total_price + destination.hotel_total_price} $</text>
-              </button>
-            ))}
-          </div>
-        )}
-        {loadingDailyPlanAndImages && <p className="loading-text">Loading...</p>}
-        {showDailyPlan && (
-          <div className="daily-plan-and-images-container" style={{ display: 'flex', justifyContent: 'space-around' }}>
-            <div className='daily-plan'>
-              <h2 style={{ textAlign: 'center' }}>Daily Plan</h2>
-              {Object.entries(dailyPlanAndImagesLinks.daily_plan).map(([key, value], index) => (
-                <div style={{ marginTop: 20 }}>
-                  <span style={{ marginBottom: 5, textDecoration: 'underline' }}>Day {key}:<br /></span>
-                  {value.map((item, index) => (
-                    <li key={index}>{item}</li>
-                  ))}
-                </div>
-              ))}
-            </div>
-            <div className='images'>
-              <h2 style={{ textAlign: 'center' }}>Images</h2>
-              {dailyPlanAndImagesLinks.images.map((image, index) => (
-                <img key={index} src={image} alt={`Image ${index}`} width={256} height={256} />
-              ))}
-            </div>
-          </div>
-        )}
-
-      </div>
+      </div >
     </>
   );
 }
