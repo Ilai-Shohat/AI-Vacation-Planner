@@ -1,0 +1,147 @@
+/* styles.css */
+
+* {
+    font-family: 'Rubik', sans-serif;
+}
+
+body {
+    background: linear-gradient(to right, #00c6ff, #0072ff);
+    /* Gradient from light blue to darker blue */
+    color: #000;
+}
+
+/* Add styles for the header */
+h1 {
+    font-size: 48px;
+    /* Bigger font size for header */
+    text-align: center;
+    /* Center align header */
+    margin-top: 2rem;
+    /* Add margin space on top */
+}
+
+/* Add styles for form elements */
+.form-label {
+    font-size: 24px;
+    /* Larger font size for form labels */
+    display: block;
+    /* Each label on a separate line */
+    margin-bottom: 1rem;
+    /* Add some space between labels */
+}
+
+.form-input {
+    font-size: 24px;
+    /* Larger font size for form inputs */
+    width: 8em;
+    margin-bottom: 1rem;
+    /* Add some space between inputs */
+    margin-left: 1em;
+}
+
+/* Add styles for the button */
+.submit-button {
+    background: linear-gradient(to right, #00ff00, #019701);
+    /* Gradient from light green to dark green*/
+    color: #ffffff;
+    /* White text color */
+    font-size: 24px;
+    /* Larger font size for button */
+    padding: 10px 20px;
+    /* Add padding to button */
+    border: none;
+    /* Remove button border */
+    cursor: pointer;
+    /* Add cursor pointer on hover */
+    border-radius: 5px;
+    /* Add some border radius to button */
+    display: block;
+    /* Display button as block element */
+    margin: 0 auto;
+    /* Center align button */
+    margin-top: 2rem;
+}
+
+.submit-button:hover {
+    background-color: #009900;
+    /* Darker green on hover */
+}
+
+.DateRangePicker.DateRangePicker_1 {
+    margin-left: 1em;
+}
+
+.DateRangePickerInput_arrow.DateRangePickerInput_arrow_1 {
+    margin-left: 1.6em;
+    margin-right: 0.8em;
+}
+
+.DateRangePickerInput.DateRangePickerInput_1.DateRangePickerInput__withBorder.DateRangePickerInput__withBorder_2 {
+    width: 15.15em;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+button {
+    /* gradient from light cyan to dark cyan*/
+    background: linear-gradient(to right, rgba(0, 255, 255, 0.561), darkcyan);
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+    text-align: center;
+    white-space: pre-line;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: teal;
+}
+
+button span {
+    font-size: 14px;
+}
+
+button .underline {
+    text-decoration: underline;
+    margin-bottom: 5px;
+}
+
+button .underline2 {
+    text-decoration: underline;
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+
+text {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+button .headline {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.images {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.loading-text {
+    text-align: center;
+    font-size: 2em;
+    margin-top: 20px;
+}
