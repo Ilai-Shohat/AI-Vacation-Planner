@@ -1,36 +1,23 @@
-/* styles.css */
-
 body {
     background: white;
-    /* Gradient from light blue to darker blue */
 }
 
-/* Add styles for the header */
 h1 {
     font-size: 48px;
-    /* Bigger font size for header */
     text-align: center;
-    /* Center align header */
     margin-top: 2rem;
-    /* Add margin space on top */
 }
 
-/* Add styles for form elements */
 .form-label {
     font-size: 24px;
-    /* Larger font size for form labels */
     display: block;
-    /* Each label on a separate line */
     margin-bottom: 1rem;
-    /* Add some space between labels */
 }
 
 .form-input {
     font-size: 24px;
-    /* Larger font size for form inputs */
     width: 8em;
     margin-bottom: 1rem;
-    /* Add some space between inputs */
     margin-left: 1em;
 }
 
@@ -39,24 +26,27 @@ h1 {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    /* Full viewport height */
+}
+
+.button-group-container {
+    width: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 .button-group {
     display: flex;
-    justify-content: space-around;
-    /* Distribute space evenly around buttons */
+    justify-content: space-between;
+    align-items: center;
     gap: 10px;
     flex-wrap: wrap;
 }
 
 .button-group button {
     flex: 1 1 18%;
-    /* Allow buttons to take up equal width and wrap if necessary */
     white-space: normal;
     margin: 10px;
-    max-width: 18%;
-    /* Ensure buttons don't exceed this width */
+    max-width: calc(20% - 20px);
 }
 
 button span {
@@ -91,12 +81,10 @@ button .headline {
     gap: 10px;
 }
 
-/* src/styles/custom.css */
 .card {
     border: 1px dashed gray;
     transition: transform 0.2s, box-shadow 0.2s;
     height: 300px;
-    /* Adjust this value as needed */
 }
 
 .card:hover {
@@ -139,6 +127,8 @@ button .headline {
     margin-top: 20px;
 }
 
+
+
 .daily-plan {
     flex: 1;
     margin-right: 20px;
@@ -163,10 +153,17 @@ button .headline {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
+    background-color: #f9f9f9;
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
 }
 
 .images img {
     width: 100%;
     height: auto;
     border-radius: 8px;
+    margin: 5px;
 }
