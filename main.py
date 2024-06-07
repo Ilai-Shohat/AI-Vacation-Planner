@@ -6,12 +6,12 @@ from fastapi.middleware.cors import CORSMiddleware
 import re
 
 OPENAI_KEY = 'sk-proj-eurY5CPWg333LbgyXj54T3BlbkFJQAvXrbGfYwcBMA0cKw2v'
-SERPAPI_KEY = '4e3d583630e2ec943a0f98fd5a61df757682b8c47667c1ca10233a60ab9781a9'
+SERPAPI_KEY = '5c9ba309151f872e593963687eeb20cc554d43f103c203369003144f1ea43699'
 OPENAI_CLIENT = OpenAI(api_key=OPENAI_KEY)
 
-def send_prompt(prompt) -> str:
+def request_prompt(prompt) -> str:
     completion = OPENAI_CLIENT.chat.completions.create(
-        model="gpt-3.5-turbo-0125",
+        model="gpt-4o",
         messages=[
             {"role": "system", "content": "You are a travel assistant."},
             {"role": "user", "content": prompt}
@@ -24,7 +24,7 @@ def send_prompt(prompt) -> str:
         return response
 
 
-def get_top_destinations(start_month: int, end_month: int, trip_type: str):
+def findTopDestinations(start_month: int, end_month: int, trip_type: str):
     good_dest = []
 
     prompt = f"""
@@ -43,7 +43,7 @@ def get_top_destinations(start_month: int, end_month: int, trip_type: str):
     Try to suggest nearest city with an airport that are well-known and have international airports.
     """
 
-    response = send_prompt(prompt).split("\n")[:7]
+    response = request_prompt(prompt).split("\n")[:7]
     for destination in response:
         destination_name, airport_code = destination.split(",")
         good_dest.append((destination_name.strip(), airport_code.strip()))
@@ -51,7 +51,7 @@ def get_top_destinations(start_month: int, end_month: int, trip_type: str):
     return good_dest
 
 
-def get_daily_plan_for_destination(arrival_date_and_time: str, departure_date_and_time: str, trip_type: str, destination: str) -> str:
+def generate_daily_plan(arrival_date_and_time: str, departure_date_and_time: str, trip_type: str, destination: str) -> str:
 
     prompt = f"""
     Create a daily plan for a {trip_type} vacation to {destination}. My arrival date and time: {arrival_date_and_time}, my departure date and time: {departure_date_and_time}.
@@ -89,10 +89,10 @@ def get_daily_plan_for_destination(arrival_date_and_time: str, departure_date_an
     Make sure to include a variety of activities that cater to different interests and preferences.
     """
 
-    response = send_prompt(prompt)
+    response = request_prompt(prompt)
     return response
 
-def search_flights(destinations: list, start_date: str, end_date: str, budget: int) -> dict:
+def findCheapestFlights(destinations: list, start_date: str, end_date: str, budget: int) -> dict:
     flights = {}
     for destination in destinations:
 
@@ -157,7 +157,7 @@ def search_flights(destinations: list, start_date: str, end_date: str, budget: i
     return flights
 
 
-def search_hotels(destinations: dict, start_date: str, end_date: str) -> dict:
+def findHotels(destinations: dict, start_date: str, end_date: str) -> dict:
     hotels = {}
     for key, destination in destinations.items():
         destination_name = key
@@ -181,7 +181,7 @@ def search_hotels(destinations: dict, start_date: str, end_date: str) -> dict:
     return hotels
 
 
-def get_most_expensive_hotels(hotels: dict) -> dict:
+def findMostExpensiveHotelsInBudget(hotels: dict) -> dict:
     max_hotel = {}
     for key, hotels_and_leftover_budget in hotels.items():
         max_price = 0
@@ -198,7 +198,7 @@ def get_most_expensive_hotels(hotels: dict) -> dict:
     return max_hotel
 
 
-def get_dalle_images(activity: str, destination: str) -> str:
+def generate_dalle_image(activity: str, destination: str) -> str:
     prompt = f"""Subject: Create an image showing {activity} in {destination}.      
             Style: make the image as real as possible"""
 
@@ -217,15 +217,15 @@ def get_dalle_images(activity: str, destination: str) -> str:
         return ''
 
 
-def get_top_5_options(start_date, end_date, trip_type, budget):
+def retrieve_top_options(start_date, end_date, trip_type, budget):
     # get the top 7 destinations
-    destinations = get_top_destinations(int(start_date.split("-")[1]), int(end_date.split("-")[1]), trip_type)
+    destinations = findTopDestinations(int(start_date.split("-")[1]), int(end_date.split("-")[1]), trip_type)
     # search for flights
-    flights: dict = search_flights(destinations, start_date, end_date, budget)
+    flights: dict = findCheapestFlights(destinations, start_date, end_date, budget)
     # search for hotels
-    hotels: dict = search_hotels(flights, start_date, end_date)
+    hotels: dict = findHotels(flights, start_date, end_date)
     # get the most expensive hotels
-    most_expensive_hotels: dict = get_most_expensive_hotels(hotels)
+    most_expensive_hotels: dict = findMostExpensiveHotelsInBudget(hotels)
 
     data: dict = {key: {} for key in most_expensive_hotels.keys()}
 
@@ -252,14 +252,14 @@ def get_top_5_options(start_date, end_date, trip_type, budget):
     print(data)
     return {k: data[k] for i, k in enumerate(data) if i < 5}
 
-def get_daily_plan_and_images(arrival_date: str, departure_date: str, trip_type: str, destination: str):
+def getPlanAndImages(arrival_date: str, departure_date: str, trip_type: str, destination: str):
     # get the daily plan
-    daily_plan = get_daily_plan_for_destination(arrival_date, departure_date, trip_type, destination)  
+    daily_plan = generate_daily_plan(arrival_date, departure_date, trip_type, destination)  
     print(daily_plan)
     activities = daily_plan.splitlines()[-4:]
     images = []
     for activity in activities:
-        image_url = get_dalle_images(activity, destination)
+        image_url = generate_dalle_image(activity, destination)
         images.append(image_url)
 
     # go over the daily_plan and create a dictionary with the days and activities for each day, without the 4 best moments
@@ -288,16 +288,16 @@ app.add_middleware(
 
 # FastAPI routes
 @app.get("/top-5-options")
-def get_top_5_options_route(start_date: str, end_date: str, trip_type: str, budget: int):
+def fetch_top_5_options(start_date: str, end_date: str, trip_type: str, budget: int):
     try:
-        return get_top_5_options(start_date, end_date, trip_type, budget)
+        return retrieve_top_options(start_date, end_date, trip_type, budget)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.get("/daily-plan-and-images")
-def get_daily_plan_and_images_route(arrival_date: str, departure_date: str, trip_type: str, destination: str):
+def get_daily_plan_and_images(arrival_date: str, departure_date: str, trip_type: str, destination: str):
     try:
-        return get_daily_plan_and_images(arrival_date, departure_date, trip_type, destination)
+        return getPlanAndImages(arrival_date, departure_date, trip_type, destination)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

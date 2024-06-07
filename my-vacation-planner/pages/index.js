@@ -105,11 +105,12 @@ export default function Home() {
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"></link>
       </Head>
-      <div class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-          <a class="navbar-brand" >A.I TRIP PLANNER</a>
+      <div className="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+
+          <a className="navbar-brand center ml-2" style={{ color: 'white' }} >A.I TRIP PLANNER</a>
         </nav>
-      </div>
+      </div >
       <div className="container-fluid mt-5">
         {showForm && (
           <div className="card">
@@ -180,7 +181,7 @@ export default function Home() {
 
                 {destination.arrival_connections_list.length > 0 && (
                   <>
-                    <span className="underline">First way flights connections:</span><br />
+                    <span className="underline">Outbound connecting airports:</span><br />
                     {destination.arrival_connections_list.map((connection, i) => (
                       <div key={i}>{connection}</div>
                     ))}
@@ -197,7 +198,7 @@ export default function Home() {
                 <br />
                 {destination.departure_connections_list.length > 0 && (
                   <>
-                    <span className="underline">Second way flights connections:</span><br />
+                    <span className="underline">Inbound connecting airports:</span><br />
                     {destination.departure_connections_list.map((connection, i) => (
                       <div key={i}>{connection}</div>
                     ))}
@@ -206,7 +207,6 @@ export default function Home() {
                 )}
                 <span className="underline">Total flights costs:</span><br /> {destination.flights_total_price} $ <br />
                 <br />
-
                 <span className="underline2">Total trip cost:</span><br /> <text className="totalPrice">{destination.flights_total_price + destination.hotel_total_price} $</text>
               </button>
             ))}

@@ -29,18 +29,13 @@ h1 {
     height: 100vh;
 }
 
-.button-group-container {
-    width: 100%;
-    padding: 0;
-    margin: 0;
-}
-
 .button-group {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
+    height: 100%;
 }
 
 .button-group button {
@@ -48,6 +43,9 @@ h1 {
     white-space: normal;
     margin: 10px;
     max-width: calc(20% - 20px);
+    height: 750px;
+    justify-content: space-evenly;
+    align-items: flex-start;
 }
 
 button span {
@@ -127,8 +125,6 @@ button .headline {
     justify-content: space-between;
     margin-top: 20px;
 }
-
-
 
 .daily-plan {
     flex: 1;
