@@ -42,50 +42,6 @@ To install the AI Vacation Planner, follow these steps:
     pip install -r requirements.txt
     ```
 
-## Usage
-
-To use the AI Vacation Planner, run the main script and follow the prompts to input your preferences:
-
-```bash
-python main.py
-```
-
-You will be asked to provide information such as your budget, preferred destinations, travel dates, and interests. The AI will then generate a personalized vacation plan based on your inputs.
-
-## Configuration
-
-The AI Vacation Planner can be configured using a configuration file (`config.json`) located in the project directory. This file allows you to specify default preferences and other settings.
-
-Example `config.json`:
-
-```json
-{
-    "default_budget": 1000,
-    "default_destinations": ["Paris", "New York"],
-    "default_interests": ["museums", "hiking"],
-    "output_format": "pdf"
-}
-```
-
-## Contributing
-
-Contributions are welcome! If you have suggestions for improvements or find any issues, please open an issue or submit a pull request. For major changes, please discuss them in an issue first to ensure they align with the project's goals.
-
-1. Fork the repository.
-2. Create a new branch:
-    ```bash
-    git checkout -b feature-branch
-    ```
-3. Commit your changes:
-    ```bash
-    git commit -m 'Add some feature'
-    ```
-4. Push to the branch:
-    ```bash
-    git push origin feature-branch
-    ```
-5. Open a pull request.
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
