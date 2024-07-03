@@ -5,8 +5,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import re
 
-OPENAI_KEY = 'sk-proj-eurY5CPWg333LbgyXj54T3BlbkFJQAvXrbGfYwcBMA0cKw2v'
-SERPAPI_KEY = '5c9ba309151f872e593963687eeb20cc554d43f103c203369003144f1ea43699'
+OPENAI_KEY = 'YOUR-API-KEY'
+SERPAPI_KEY = 'YOUR-API-KEY'
 OPENAI_CLIENT = OpenAI(api_key=OPENAI_KEY)
 
 def request_prompt(prompt) -> str:
